@@ -1,0 +1,29 @@
+.box {
+  border: 1px solid lightgray;
+  width: 500px;
+  height: 500px;
+  margin: 1em;
+}
+
+.item-img {
+  width: 400px;
+  height: 400px;
+}
+
+.mainBox {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 1em;
+}
+
+.mainView {
+  display: flex;
+  flex-direction: column;
+}
