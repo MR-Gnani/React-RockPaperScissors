@@ -1,8 +1,41 @@
+@font-face {
+  font-family: 'JalnanGothic';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.mainView {
+  background-image: url(https://img.freepik.com/free-vector/realistic-casino-gambling-illustration_52683-99917.jpg);
+  display: flex;
+  justify-content: center;
+}
+
 .box {
   border: 1px solid lightgray;
+  background-color: white;
   width: 400px;
   height: 400px;
   margin: 1em;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-family: 'JalnanGothic';
+  color: white;
+  font-size: 50px;
+  background-color: rgba(1, 118, 7, 0.623);
+  font-style: italic;
+}
+
+.setting {
+  background-color: rgba(0, 0, 0, 0.901);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .item-img {
@@ -16,6 +49,14 @@
   text-align: center;
 }
 
+.settingBox {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
 .buttonBox {
   display: flex;
   justify-content: center;
@@ -27,15 +68,21 @@
   display: flex;
   justify-content: center;
   text-align: center;
-  margin: 1em;
+  color: white;
+  margin-bottom: 1em;
 }
 
 .chargeInput {
   margin: 0.25em;
+  border: none;
+  border-radius: 10px;
+  padding: 0.5em;
 }
 
 .chargeButton {
   margin: 0.25em;
+  border: none;
+  border-radius: 10px;
 }
 
 .chargeText {
@@ -48,31 +95,38 @@
 }
 
 .Win {
-  border: 2px solid green;
+  border: 5px solid green;
 }
 
 .Lose {
-  border: 2px solid red;
+  border: 5px solid red;
 }
 
 .Tie {
-  border: 3px solid black;
+  border: 5px solid black;
 }
 
 .button {
   margin: 0.4em;
   padding: 1em;
   width: 7%;
+  background-color: rgb(255, 39, 39);
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
+  border-radius: 20px;
 }
 
 .assetBox {
   display: flex;
   justify-content: center;
   text-align: center;
+  margin: 1em;
 }
 
 .assetContent {
   font-size: 20px;
-  color: black;
+  color: white;
   font-weight: bold;
 }

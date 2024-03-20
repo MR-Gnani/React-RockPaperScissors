@@ -119,18 +119,9 @@ function App() {
 
   return (
     <div className='mainView'>
-      {/* 레버리지 선택 영역 */}
-      <div className='mainBox'>
-        <div> 배율 설정 </div>
-        <label>
-          <input type="radio" name="leverage" value={1} checked={leverage === 1} onChange={handleLeverageChange} /> x1
-        </label>
-        <label>
-          <input type="radio" name="leverage" value={2} checked={leverage === 2} onChange={handleLeverageChange} /> x2
-        </label>
-        <label>
-          <input type="radio" name="leverage" value={3} checked={leverage === 3} onChange={handleLeverageChange} /> x3
-        </label>
+      <div className='title'>
+        Casino <br/>
+        : Betting Rock Paper Scissors
       </div>
 
       {/* 박스 영역 */}
@@ -147,6 +138,21 @@ function App() {
         <button className='button' onClick={()=>play("paper")}>보</button>
       </div>
 
+     <div className='setting'>
+      {/* 레버리지 선택 영역 */}
+      <div className='settingBox'>
+        <div> Betting Leverage </div>
+        <label>
+          <input type="radio" name="leverage" value={1} checked={leverage === 1} onChange={handleLeverageChange} /> x1
+        </label>
+        <label>
+          <input type="radio" name="leverage" value={2} checked={leverage === 2} onChange={handleLeverageChange} /> x2
+        </label>
+        <label>
+          <input type="radio" name="leverage" value={3} checked={leverage === 3} onChange={handleLeverageChange} /> x3
+        </label>
+      </div>
+
       {/* 게임 코인 영역 */}
       <div className='assetBox'>
         <Asset item={coinCount}/>
@@ -154,10 +160,10 @@ function App() {
 
       {/* 코인 충전 영역 */}
       <div className='chargeBox'>
-        <div className='chargeText'> 코인 충전소 </div>
-        <input type='number' className='chargeInput' ref={inputRef}/>
-        <button className='chargeButton' onClick={()=>charge(inputRef.current.value)}> 충전하기 </button>
+        <input type='number' className='chargeInput' placeholder='Coin Charge' ref={inputRef}/>
+        <button className='chargeButton' onClick={()=>charge(inputRef.current.value)}> Charge </button>
       </div>
+     </div>
 
     </div>
   );
