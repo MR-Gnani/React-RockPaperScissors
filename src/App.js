@@ -1,14 +1,7 @@
 import './App.css';
 import Box from "./component/Box";
-import { useState } from 'react';
-
-// 1. 박스 2개 (title, image, result)
-// 2. 가위바위보 버튼
-// 3. 버튼 클릭시 클릭한 값이 박스에 랜더링
-// 4. 컴퓨터는 랜덤
-// 5. 3과4의 결과에 따라 승패가 정해짐
-// 6. 이기면 초록, 지면 빨강, 비기면 검정
-
+import Asset from "./component/Asset";
+import { useState, useRef } from 'react';
 
 
 const choice = {
@@ -25,31 +18,145 @@ const choice = {
   paper:{
     name:"Paper",
     img:"https://cdn11.bigcommerce.com/s-2i5mq6440u/images/stencil/2048x2048/products/3762/9095/PlasticPaper-CutSheet__18809.1597757191.png?c=2"
+  },
+
+  default:{
+    name:"Default",
+    img:"https://miro.medium.com/v2/resize:fit:1338/0*3oJdSb7B26rt3xjJ"
   }
 };
 
 function App() {
 
-  const[userSelect, setUserSelect] = useState(null) 
+  // User State
+  const[userSelect, setUserSelect] = useState(choice.default); 
+
+  // Computer State
+  const[computerSelect, setComputerSelect] = useState(choice.default);
+
+  // Result State
+  const[result, setResult] = useState('');
+
+  // Count State
+  let[coinCount, setCoinCount] = useState(0);
+  const inputRef = useRef(null);
+
+  // Leverage State
+  const[leverage, setLeverage] = useState(1);
+
+  const handleLeverageChange = (event) => {
+    const selectedLeverage = parseInt(event.target.value); // 선택된 레버리지를 정수형으로 변환
+    setLeverage(selectedLeverage); // 선택된 레버리지로 상태 업데이트
+  };
+
+  const charge = (amount)=>{
+    const newAmount = parseInt(amount)
+    setCoinCount(coinCount + newAmount);
+    inputRef.current.value = '';
+  }
 
   const play = (userChoice)=>{
-    console.log(userChoice);
-    setUserSelect(choice[userChoice]) 
+    if(coinCount <= 0) {
+      alert('To play the game, you need to recharge coins.')
+      return;
+    }
+
+    setUserSelect(choice[userChoice]) ;
+
+    // computer random 함수
+    let computerChoice = randomChoice();
+    setComputerSelect(computerChoice);
+
+    // 결과 출력 함수
+    setResult(judgement(choice[userChoice], computerChoice));
+
+    // coin count 함수
+    setCoinCount(countCoin(choice[userChoice], computerChoice));
+    
+  };
+
+  const countCoin = (user, computer)=>{
+    let newCoinCount;
+
+    if(user.name === computer.name){
+      newCoinCount = coinCount;
+    }else if(user.name === "Rock") {
+      newCoinCount = computer.name === "Scissors" ? coinCount+leverage*1 : coinCount-leverage*1;
+    }else if(user.name === "Scissors") {
+      newCoinCount = computer.name === "Paper" ? coinCount+leverage*1 : coinCount-leverage*1;
+    }else if(user.name === "Paper") {
+      newCoinCount = computer.name === "Rock" ? coinCount+leverage*1 : coinCount-leverage*1;
+    }
+  
+    // 게임 코인이 0보다 작으면 0으로 설정
+    if (newCoinCount < 0) {
+      newCoinCount = 0;
+    }
+  
+    return newCoinCount;
   }
+
+  const judgement = (user, computer)=>{
+
+    if(user.name === computer.name){
+      return "Tie"
+    }else if(user.name === "Rock") return computer.name === "Scissors" ? "Win" : "Lose";
+    else if(user.name === "Scissors") return computer.name === "Paper" ? "Win" : "Lose";
+    else if(user.name === "Paper") return computer.name === "Rock" ? "Win" : "Lose";
+
+  }
+  // computer random 함수
+  const randomChoice = ()=>{
+    // default 제외하고 배열 생성
+    let itemArray = Object.keys(choice).filter(key => key !== 'default');
+
+    let randomItem = Math.floor(Math.random() * itemArray.length);
+    let final = itemArray[randomItem];
+
+    return choice[final];
+  }
+
 
   return (
     <div className='mainView'>
+      {/* 레버리지 선택 영역 */}
+      <div className='mainBox'>
+        <div> 배율 설정 </div>
+        <label>
+          <input type="radio" name="leverage" value={1} checked={leverage === 1} onChange={handleLeverageChange} /> x1
+        </label>
+        <label>
+          <input type="radio" name="leverage" value={2} checked={leverage === 2} onChange={handleLeverageChange} /> x2
+        </label>
+        <label>
+          <input type="radio" name="leverage" value={3} checked={leverage === 3} onChange={handleLeverageChange} /> x3
+        </label>
+      </div>
+
       {/* 박스 영역 */}
       <div className='mainBox'>
-        <Box title="Player" item={userSelect}/>
-        {/* <Box title="Computer"/> */}
+        <Box title="Player" item={userSelect} result={result}/>
+        <Box title="Computer" item={computerSelect}
+         result={result !== '' && (result === 'Tie' ? result : (result ==='Win' ? 'Lose' : 'Win'))}/>
       </div>
 
       {/* 버튼 영역 */}
       <div className='buttonBox'>
-        <button onClick={()=>play("scissors")}>가위</button>
-        <button onClick={()=>play("rock")}>바위</button>
-        <button onClick={()=>play("paper")}>보</button>
+        <button className='button' onClick={()=>play("scissors")}>가위</button>
+        <button className='button' onClick={()=>play("rock")}>바위</button>
+        <button className='button' onClick={()=>play("paper")}>보</button>
+      </div>
+
+      {/* 게임 코인 영역 */}
+      <div className='assetBox'>
+        <Asset item={coinCount}/>
+      </div>
+
+      {/* 코인 충전 영역 */}
+      <div className='chargeBox'>
+        <div className='chargeText'> 코인 충전소 </div>
+        <input type='number' className='chargeInput' ref={inputRef}/>
+        <button className='chargeButton' onClick={()=>charge(inputRef.current.value)}> 충전하기 </button>
       </div>
 
     </div>
